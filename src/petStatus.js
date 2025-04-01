@@ -102,3 +102,4 @@ function updatePetStatus(pet) {
       default: return 'Суперформа';
     }
   }
+ 
