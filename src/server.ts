@@ -1,4 +1,4 @@
-import { createServer } from './serverInit'
+import { createServer } from './serverInit.js'
 
 export const init = async () => {
   const server = await createServer();

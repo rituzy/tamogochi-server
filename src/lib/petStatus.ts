@@ -3,7 +3,7 @@
  * @param {Object} pet - Объект питомца из базы данных
  * @returns {Object} - Обновленный объект питомца
  */
-function updatePetStatus(pet) {
+export function updatePetStatus(pet) {
     const now = new Date();
     const petCopy = { ...pet };
     
@@ -68,7 +68,7 @@ function updatePetStatus(pet) {
    * @param {Object} pet - Объект питомца
    * @returns {string|null} - Сообщение или null, если всё в порядке
    */
-  function getPetNeedsMessage(pet) {
+export  function getPetNeedsMessage(pet) {
     if (pet.hunger < 20) {
       return 'Питомец голоден! Покормите его.';
     }
@@ -93,7 +93,7 @@ function updatePetStatus(pet) {
    * @param {number} currentLevel - Текущий уровень питомца
    * @returns {string} - Название следующей эволюции
    */
-  function getNextEvolutionName(currentLevel) {
+export  function getNextEvolutionName(currentLevel) {
     switch (currentLevel) {
       case 1: return 'Малыш';
       case 2: return 'Подросток';

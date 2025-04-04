@@ -1,5 +1,5 @@
 import {VercelRequest, VercelResponse} from '@vercel/node'
-import { createServer } from './serverInit'
+import { createServer } from './serverInit.js'
 
 const handler: any = async (req: VercelRequest, resp: VercelResponse) => {
     try{
@@ -18,7 +18,6 @@ const handler: any = async (req: VercelRequest, resp: VercelResponse) => {
             error: "Произошла ошибка при обработке запроса"
         });
     }
-    resp.status(200).send('Hello from Vercel');
 }
 
 export default handler;
