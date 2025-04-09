@@ -1,9 +1,10 @@
+import {LevelDetails} from '../types.js'
 /**
  * Обновляет статус питомца на основе прошедшего времени
  * @param {Object} pet - Объект питомца из базы данных
  * @returns {Object} - Обновленный объект питомца
  */
-export function updatePetStatus(pet) {
+export async function updatePetStatus(pet, updater) {
     const now = new Date();
     const petCopy = { ...pet };
     
@@ -47,7 +48,7 @@ export function updatePetStatus(pet) {
     const averageStats = (petCopy.hunger + petCopy.happiness + petCopy.energy) / 3;
     petCopy.health = Math.min(100, averageStats);
     
-    return petCopy;
+    return updater(petCopy);
   }
   
   /**
@@ -93,7 +94,7 @@ export  function getPetNeedsMessage(pet) {
    * @param {number} currentLevel - Текущий уровень питомца
    * @returns {string} - Название следующей эволюции
    */
-export  function getNextEvolutionName(currentLevel) {
+export function getNextEvolutionName(currentLevel) {
     switch (currentLevel) {
       case 1: return 'Малыш';
       case 2: return 'Подросток';
@@ -102,4 +103,110 @@ export  function getNextEvolutionName(currentLevel) {
       default: return 'Суперформа';
     }
   }
+
+  export async function feed(petData, prisma) {
+        const newHunger = Math.min(100, petData.hunger + 20 + petData.feedBonus);
+        const newEnergy = Math.min(100, petData.energy + 5);
+        const newLastFeed = new Date();
+        const petId = petData.id;
+        const petDataFed = await prisma.pet.update({
+            where: {
+                id: petId,
+            },
+            data: {
+                hunger: newHunger,
+                energy: newEnergy,
+                lastFeed: newLastFeed
+            }
+        });
+
+        return petDataFed;
+  }
+
+  export async function play(petData, prisma) {
+
+    const newHappiness = Math.min(100, petData.happiness + 20 + petData.happyBonus);
+    const newKnowledge = Math.min(petData.knowledge + 5);
+    const newHunger = Math.max(petData.hunger - 10, 0);
+    const newEnergy = Math.max(petData.energy - 20, 0);
+    const newLastPlay = new Date();
+    const petId = petData.id;
+    const petDataPlay = await prisma.pet.update({
+        where: {
+            id: petId,
+        },
+        data: {
+            happiness: newHappiness,
+            knowledge: newKnowledge,
+            hunger: newHunger,
+            energy: newEnergy,
+            lastPlay: newLastPlay
+        }
+    });
+
+    return petDataPlay;
+}
+
+export async function sleep(petData, prisma) {
+  const newHunger = Math.max(petData.hunger - 5, 0);
+  const newEnergy = 100;
+  const newLastSleep = new Date();
+  const petId = petData.id;
+  const petDataSleep = await prisma.pet.update({
+      where: {
+          id: petId,
+      },
+      data: {
+          hunger: newHunger,
+          energy: newEnergy,
+          lastSleep: newLastSleep
+      }
+  });
+
+  return petDataSleep;
+}
+
+export async function educate(petData, prisma) {
+  const newKnowledge = Math.min(100, petData.knowledge + 15);
+  let newLevel = petData.level;
+  let levelUp = false;
+  if (newKnowledge > 95) {
+      if (newLevel < 10) {
+          newLevel++;
+          levelUp = true;
+      }
+  }
+  const newHappiness = Math.max(petData.happiness - 5, 0);
+  const newEnergy = Math.max(petData.energy - 10, 0);
+  const newLastEducate = new Date();
+  const petId = petData.id;
+  const petDataEdu = await prisma.pet.update({
+      where: {
+          id: petId,
+      },
+      data: {
+          knowledge: newKnowledge,
+          level: newLevel,
+          happiness: newHappiness,
+          energy: newEnergy,
+          lastEducate: newLastEducate
+      }
+  });
+
+  return petDataEdu;
+}
+
+export function levelUp(petData) {
+  const newKnowledge = petData.knowledge;
+  let newLevel = petData.level;
+  let levelUp = false;
+  if (petData.knowledge > 95) {
+      if (newLevel < 10) {
+          newLevel++;
+          levelUp = true;
+      }
+  }
+  const result = {newLevel, levelUp} as LevelDetails;
+  return result;
+}
  

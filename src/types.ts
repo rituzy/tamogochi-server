@@ -1,7 +1,6 @@
 import exp from "constants";
 
 export type UserData = {
-    user: {
     id: number;
     first_name: string;
     last_name: string;
@@ -9,7 +8,6 @@ export type UserData = {
     language_code: string;
     photo_url: string;
     is_premium: boolean;
-    }
 };
 
 export type PetId = {
@@ -17,7 +15,6 @@ export type PetId = {
 };
 
 export type HookResponse = {
-
         status: number,
         statusText: string,
         headers: {
@@ -37,3 +34,8 @@ export type HookResponse = {
         type: string,
         url: string 
 };
+
+export type LevelDetails = {
+  newLevel: number,
+  levelUp: boolean
+}

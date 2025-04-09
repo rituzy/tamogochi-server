@@ -1,12 +1,9 @@
 import 'dotenv/config';
 import Hapi from '@hapi/hapi';
-import exp from 'constants';
 import { bot } from './bot.js'
-import { prisma } from './lib/prisma.js'
-import { UserData, PetId, HookResponse } from './types.js'
-import {updatePetStatus} from './lib/petStatus.js'
-import {registerUserRoutes} from './routes/user.js'
-import {registerPetRoutes} from './routes/pet.js'
+import { HookResponse } from './types.js'
+import { registerUserRoutes } from './routes/user.js'
+import { registerPetRoutes } from './routes/pet.js'
 
 const WEB_HOOKURL = process.env.WEBHOOK_URL + "/webhook";
 const CHAT_ID = process.env.CHAT_ID || 123;
@@ -83,7 +80,7 @@ export const createServer = async () => {
     registerUserRoutes(server);
 
     registerPetRoutes(server);
-    
+
     await server.initialize();
 
     return server;

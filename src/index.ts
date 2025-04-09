@@ -1,5 +1,6 @@
 import {VercelRequest, VercelResponse} from '@vercel/node'
 import { createServer } from './serverInit.js'
+import { allowCors } from "./lib/cors.js";
 
 const handler: any = async (req: VercelRequest, resp: VercelResponse) => {
     try{
@@ -20,4 +21,4 @@ const handler: any = async (req: VercelRequest, resp: VercelResponse) => {
     }
 }
 
-export default handler;
+export default allowCors(handler);
